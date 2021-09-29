@@ -70,7 +70,7 @@ function App() {
               (
                 <button
                   type="button"
-                  className="btn-info mr-1"
+                  className="btn-info mr-1 mb-2"
                   onClick={paginaAnterior}
                 >&laquo; Anterior</button>
               )
@@ -85,7 +85,7 @@ function App() {
               (
                 <button
                   type="button"
-                  className="btn-info mr-1"
+                  className="btn-info mr-1 mb-2"
                   onClick={paginaSiguiente}
                 >Siguiente &raquo;</button>
               )
