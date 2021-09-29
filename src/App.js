@@ -6,6 +6,8 @@ function App() {
 
   const [busqueda, setBusqueda] = useState('');
   const [imagenes, setImagenes] = useState([]);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
 
   useEffect(() => {
     if (busqueda === '') {
@@ -14,15 +16,36 @@ function App() {
       const consultarApi = async () => {
         const imagenesPorPagina = 30;
         const key = '18225503-c71d729ffed9912fd44abcc81';
-        const url = `https://pixabay.com/api/?key=${key}&q=${busqueda}&per_page=${imagenesPorPagina}`;
+        const url = `https://pixabay.com/api/?key=${key}&q=${busqueda}&per_page=${imagenesPorPagina}&page=${paginaActual}`;
 
         const respuesta = await fetch(url);
         const data = await respuesta.json();
+
+        const calculoTotalPaginas = Math.ceil(data.totalHits / imagenesPorPagina);
+
         setImagenes(data.hits);
+        setTotalPaginas(calculoTotalPaginas);
+
+        const jumbotron = document.querySelector('.jumbotron');
+        jumbotron.scrollIntoView({ behavior: 'smooth' });
       };
       consultarApi();
     }
-  }, [busqueda])
+  }, [busqueda, paginaActual])
+
+  const paginaAnterior = () => {
+    if (paginaActual > 1) {
+      const nuevaPaginaActual = paginaActual - 1;
+      setPaginaActual(nuevaPaginaActual);
+    }
+  };
+
+  const paginaSiguiente = () => {
+    if (paginaActual < totalPaginas) {
+      const nuevaPaginaActual = paginaActual + 1;
+      setPaginaActual(nuevaPaginaActual);
+    }
+  };
 
   return (
     <Fragment>
@@ -37,6 +60,36 @@ function App() {
           <ListadoImagenes
             imagenes={imagenes}
           />
+
+          {
+            (paginaActual === 1) ?
+              (
+                null
+              )
+              :
+              (
+                <button
+                  type="button"
+                  className="btn-info mr-1"
+                  onClick={paginaAnterior}
+                >&laquo; Anterior</button>
+              )
+          }
+
+          {
+            (paginaActual === totalPaginas) ?
+              (
+                null
+              )
+              :
+              (
+                <button
+                  type="button"
+                  className="btn-info mr-1"
+                  onClick={paginaSiguiente}
+                >Siguiente &raquo;</button>
+              )
+          }
         </div>
       </div>
     </Fragment>
