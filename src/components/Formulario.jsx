@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Error from "./Error";
 
-const Formulario = () => {
+const Formulario = ({setBusqueda}) => {
 
   const [descripcion, setDescripcion] = useState('');
   const [error, setError] = useState(false);
@@ -9,6 +9,7 @@ const Formulario = () => {
   const buscarImagenes = (e) => {
     e.preventDefault();
     if (descripcion.trim() !== '') {
+      setBusqueda(descripcion);
       setError(false);
     } else {
       setError(true);
@@ -26,6 +27,7 @@ const Formulario = () => {
             className="form-control form-control-lg"
             placeholder="Ingrese la descripción de la imagen"
             onChange={(e) => setDescripcion(e.target.value)}
+            required
           />
         </div>
         <div className="form-group col-md-4">
